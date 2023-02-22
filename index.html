@@ -6,6 +6,97 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Ventanas menu</title>
         <link rel="stylesheet" href="estilo.css">
-        <script src="javascript.js"></script>
     </head>
+    <body onload="checkCookie()">
+        <div>
+            <table>
+                <tr>
+                    <td><label class="name" for="">A001 Ordenador PIV Precio 650.1€</label></td>
+                    <td class="adquirir"><label for="">Adquirir</label></td>
+                    <td><input id="A001" type="number"></td>
+                    <td><label for="">uds</label></td>
+                    <td><img src="imagenes/ORDENADOR1.GIF" alt="imagen_ordenador"></td>
+                </tr>
+                <tr>
+                    <td><label class="name" for="">A002 Ordenador PIV mod. 2 Precio 683.15€</label></td>
+                    <td class="adquirir"><label for="">Adquirir</label></td>
+                    <td><input id="A002" type="number"></td>
+                    <td><label for="">uds</label></td>
+                    <td><img src="imagenes/ORDENADOR2.GIF" alt="imagen_ordenador2"></td>
+                </tr>
+                <tr>
+                    <td><label class="name" for="">B001 Ratón FFD Precio 20.99€</label></td>
+                    <td class="adquirir"><label for="">Adquirir</label></td>
+                    <td><input id="B001" type="number"></td>
+                    <td><label for="">uds</label></td>
+                    <td><img src="imagenes/RATON.GIF" alt="Ratón"></td>
+                </tr>
+                <tr>
+                    <td><label class="name" for="">C001 Microfono Desal Precio 40.80€</label></td>
+                    <td class="adquirir"><label for="">Adquirir</label></td>
+                    <td><input id="C001" type="number"></td>
+                    <td><label for="">uds</label></td>
+                    <td><img src="imagenes/MICRO.GIF" alt="Microfono"></td>
+                </tr>
+            </table>
+        <br>
+        </div>
+        
+        <button onclick="mostrar()">ver productos</button>
+        <script>
+        function mostrar(){
+            let productos = validacion();
+            crear_cookies();
+            window.location.href = "MiniPedido.html";
+        }
+
+        function validacion(){   
+            formulario = document.all;
+            productos = new Array();
+            for(let i = 1; i < formulario.length - 1 ; i++) { 
+                if (formulario[i].tagName == "INPUT"){
+
+                    if (formulario[i].value != "" && formulario[i].value > 0){
+                        let producto = new Array();
+                        producto[0] = formulario[i].id;
+                        producto[1] = formulario[i].value;
+                        productos.push(producto);
+                    }
+                }
+            }
+            return productos;
+        }
+
+        function crear_cookies(){
+            for(let i = 0; i < productos.length; i++) { 
+                setCookie(productos[i][0],productos[i][1],10);
+            }
+        }
+
+
+        function setCookie(cname,cvalue,exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=MiniPedido.html";
+        }
+        
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
+        }
+        
+        </script>
+    </body>
 </html>

@@ -1,0 +1,17 @@
+table{
+    border: solid;
+    border-color: black;
+    margin-left: 20%;
+    width: 40%;
+}
+
+.adquirir{
+    margin-left: 40%;
+    border-left: solid;
+    border-color: black;
+}
+
+img{
+    height: 50px;
+    width: 50px;
+}

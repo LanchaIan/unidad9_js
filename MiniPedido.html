@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ventanas menu</title>
+        <link rel="stylesheet" href="estilo.css">
+    </head>
+    <body onload="mostrar()">
+        <div>
+            <h1 style="text-align: center;">Pedido:</h1>
+            <br>
+            <div id="div1" style="text-align: center;"></div>
+        <br>
+        </div>
+
+        <script>
+            function producto(pcodigo, pdescripcion, pprecio, pimagen){
+            this.codigo = pcodigo;
+            this.descripcion = pdescripcion;
+            this.precio = pprecio;
+            this.imagen = pimagen;
+            }
+
+        const all_productos = new Array();
+        all_productos[0] = new producto("A001", "Ordenador PIV", 650.1, "imagenes/ORDENADOR1.GIF");
+        all_productos[1] = new producto("A002", "Ordenador PIV mod. 2", 683.15, "imagenes/ORDENADOR2.GIF");
+        all_productos[2] = new producto("B001", "Ratón FFD", 20.99, "imagenes/RATON.GIF");
+        all_productos[3] = new producto("C001", "Microfono Desal", 40.80, "imagenes/MICRO.GIF");
+
+        function mostrar(){
+            let productos = document.cookie;
+            let productos_compra = new Array();
+            let producto = new Array();
+            let codigo_ = productos.substr(0,4);
+            let cantidad_ = productos.substr(5,2);
+            let cantidad_num_ = cantidad_.match(/\d+/);
+            producto[0] = codigo_;
+            producto[1] = cantidad_num_;
+            productos_compra.push(producto);
+            for (let i = 0; i < productos.length; i++){
+                if (productos[i] == " "){
+                    let codigo = productos.substr(i+1,4);
+                    let cantidad = productos.substr(i+6,2);
+                    let cantidad_num = cantidad.match(/\d+/);
+
+                    if (cantidad_num != null){
+                        let producto_ = new Array();
+                        producto_[0] = codigo;
+                        producto_[1] = cantidad_num;
+                        productos_compra.push(producto_);
+                }
+                }
+            }
+            for (let i = 0; i < productos_compra.length; i++){
+                escribir_precios(productos_compra[i]);
+            }
+            escribir_resultado(productos_compra);
+        }
+
+        function get_precio(productos){
+            total = 0;
+            for (let i = 0; i < all_productos.length; i++){
+                for (let y = 0; y < productos.length; y++){
+                    if (all_productos[i].codigo == productos[y][0]){
+                        let precio = all_productos[i].precio;
+                        let cantidad = productos[y][1];
+                        total += precio * cantidad;
+                    }
+            }
+            }
+            return total;
+        }
+
+        function escribir_precios(producto){
+            let para = document.createElement("p");
+            let precio__;
+            let descripcion;
+            let cantidad__;
+            let total_;
+            for (let i = 0; i < all_productos.length; i++){
+                    if (all_productos[i].codigo == producto[0]){
+                        precio__ = all_productos[i].precio;
+                        descripcion = all_productos[i].descripcion;
+                        cantidad__ = producto[1];
+                        total_ = precio__ * cantidad__;
+                        break;
+                    }
+            }
+            let node = document.createTextNode(producto[1] + "ud. " + descripcion + "=" + total_);
+            para.appendChild(node);
+            const element = document.getElementById("div1");
+            element.appendChild(para);
+        }
+
+        function escribir_resultado(productos){
+            let para = document.createElement("p");
+            let node = document.createTextNode("Total = " + get_precio(productos));
+            para.appendChild(node);
+            const element = document.getElementById("div1");
+            element.appendChild(para);
+        }
+
+        function setCookie(cname,cvalue,exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/MiniPedido.html";
+        }
+        
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
+        }
+        
+        </script>
+    </body>
+</html>
